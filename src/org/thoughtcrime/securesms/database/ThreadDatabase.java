@@ -90,7 +90,7 @@ public class ThreadDatabase extends Database {
   private String getRecipientsAsString(long[] recipientIds) {
     StringBuilder sb = new StringBuilder();
     for (int i=0;i<recipientIds.length;i++) {
-      if (i != 0) sb.append(' ');
+      sb.append(' ');
       sb.append(recipientIds[i]);
     }
 
@@ -253,15 +253,15 @@ public class ThreadDatabase extends Database {
     if (recipientIds == null || recipientIds.size() == 0)
       return null;
 
-    String selection       = RECIPIENT_IDS + " = ?";
+    String selection       = RECIPIENT_IDS + " LIKE ?";
     String[] selectionArgs = new String[recipientIds.size()];
 
     for (int i=0;i<recipientIds.size()-1;i++)
-      selection += (" OR " + RECIPIENT_IDS + " = ?");
+      selection += (" OR " + RECIPIENT_IDS + " LIKE ?");
 
     int i= 0;
     for (long id : recipientIds) {
-      selectionArgs[i++] = id+"";
+      selectionArgs[i++] = "% " + id + " %";
     }
 
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
